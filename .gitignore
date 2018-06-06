@@ -1,9 +1,11 @@
 *.iml
 */target/*
 .idea/*
+*/.idea/*
 */gen/*
 */Data/*
 */Result/*
+*/schema/*
 
 *.classpath
 *.project
