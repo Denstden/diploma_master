@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<questions>
+    <global_preamble>
+        Написати функцію, що приймає
+    </global_preamble>
+
+    <question_essay>
+        <preamble>
+            1 дiйсний параметр i зменшує його на 6
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>4</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <preamble>
+            1 дiйсний параметр й обнулює його, якщо вiн вiд'ємний
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>4</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <preamble>
+            2 дiйсних параметри й обмiнює їх мiсцями
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <preamble>
+            2 цiлi параметри й обнулює другий, якщо вiн бiльше
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+</questions>

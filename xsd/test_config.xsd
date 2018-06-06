@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="testConfig">
+        <xs:all>
+            <xs:element name="test_name" type="xs:string" minOccurs="0"/>
+            <xs:element name="test_type" default="TRAINING">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="TRAINING"/>
+                        <xs:enumeration value="CONTROL"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="result_source">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="path" type="xs:string"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="count_variants" type="xs:nonNegativeInteger"/>
+            <xs:element name="test_header" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="line" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+</xs:schema>

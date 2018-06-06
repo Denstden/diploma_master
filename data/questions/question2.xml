@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<questions>
+    <global_preamble>
+        Написати функцію, яка
+    </global_preamble>
+
+    <question_essay>
+        <hash_tag>#binom_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть бiномних коефiцiєнтiв C(n+k,k), k=0,1,...,n
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#binom_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть бiномних коефiцiєнтiв C(2n+k,n+k), k=0,1,...,n
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#binom_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть бiномних коефiцiєнтiв C(n,k), k=n,n-1,...,m
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#binom_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть бiномних коефiцiєнтiв C(n,2k), k=0,1,...,n
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#factorial_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть (2k)!!/((k!)^{2}), k=1,...,n
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#factorial_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть (2k)!!/(((k+1)!)((k-1)!)), k=2,...,n
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#factorial_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть (2k+1)!!/((k!)^{2}), k=1,...,n
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#factorial_seq</hash_tag>
+        <preamble>
+            друкує послiдовнiсть (2k+1)!!/(((k+1)!)((k-1)!)), k=2,...,n
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#pow_sequence</hash_tag>
+        <preamble>
+            заповнює масив послiдовними парними степенями (0,2,..., 2n) числа 3.1
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#pow_sequence</hash_tag>
+        <preamble>
+            заповнює масив послiдовними непарними степенями (1,3,..., 2n+1) числа 3.1
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#pow_sequence</hash_tag>
+        <preamble>
+            заповнює масив послiдовними парними степенями (0,2,..., 2n) числа -2.014
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+
+    <question_essay>
+        <hash_tag>#pow_sequence</hash_tag>
+        <preamble>
+            заповнює масив послiдовними непарними степенями (1,3,..., 2n+1) числа 2.015
+        </preamble>
+        <formatting_elements>
+            <strategy>rows</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_essay>
+</questions>

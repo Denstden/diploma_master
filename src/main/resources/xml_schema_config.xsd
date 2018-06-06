@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://tempuri.org/XMLSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="test" minOccurs="1">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="result_source" minOccurs="1">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element name ="path" type="xs:string" minOccurs="1" />
+                  </xs:all>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="count_variants" type="xs:nonNegativeInteger" minOccurs="1"/>
+              <xs:element name="test_header" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name ="line" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="variant" minOccurs="1">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="variant_header" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name ="line" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="variant_footer" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name ="line" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name ="points" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="questions" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name ="question" minOccurs="1" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:all>
+                          <xs:element name="sources" minOccurs="1">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name ="source" minOccurs="1" maxOccurs="unbounded">
+                                  <xs:complexType>
+                                    <xs:all>
+                                      <xs:element name="question_source" type="xs:string" minOccurs="1"/>
+                                      <xs:element name="count_questions" type="xs:nonNegativeInteger" minOccurs="0"/>
+                                    </xs:all>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="estimation" minOccurs="1">
+                            <xs:complexType>
+                              <xs:all>
+                                <xs:element name="mark" type="xs:decimal" minOccurs="1" />
+                                <xs:element name="strategy" minOccurs="1">
+                                  <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:enumeration value="all_nothing"/>
+                                      <xs:enumeration value="evenly"/>
+                                    </xs:restriction>
+                                  </xs:simpleType>
+                                </xs:element>
+                              </xs:all>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:all>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

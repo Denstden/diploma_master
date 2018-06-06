@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:include schemaLocation="formatting_elements.xsd"/>
+
+    <xs:element name="questions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="global_preamble" type="xs:string" minOccurs="0"/>
+
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="question_checkbox">
+                        <xs:complexType>
+                            <xs:all>
+                                <xs:element name="preamble" type="xs:string"/>
+                                <xs:element name="count_correct_answers" type="xs:nonNegativeInteger"/>
+                                <xs:element name="count_incorrect_answers" type="xs:nonNegativeInteger"/>
+                                <xs:element name="source_correct_answers" type="xs:string"/>
+                                <xs:element name="source_incorrect_answers" type="xs:string"/>
+                                <xs:element name="formatting_elements" type="formatting_elements"/>
+                                <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                            </xs:all>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="question_yes_no">
+                        <xs:complexType>
+                            <xs:all>
+                                <xs:element name="preamble" type="xs:string"/>
+                                <xs:element name="answer" type="xs:string"/>
+                                <xs:element name="formatting_elements" type="formatting_elements"/>
+                                <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                            </xs:all>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="question_essay">
+                        <xs:complexType>
+                            <xs:all>
+                                <xs:element name="preamble" type="xs:string"/>
+                                <xs:element name="formatting_elements" type="formatting_elements"/>
+                                <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                            </xs:all>
+
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="question_radiobutton">
+                        <xs:complexType>
+                            <xs:all>
+                                <xs:element name="preamble" type="xs:string"/>
+                                <xs:element name="count_answers" type="xs:nonNegativeInteger"/>
+                                <xs:element name="source_correct_answers" type="xs:string"/>
+                                <xs:element name="source_incorrect_answers" type="xs:string"/>
+                                <xs:element name="formatting_elements" type="formatting_elements"/>
+                                <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                            </xs:all>
+
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

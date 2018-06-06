@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<globalConfig>
+    <testConfig>
+        <test_name>Самостійна робота №1</test_name>
+        <test_type>CONTROL</test_type>
+        <result_source>
+            <path>result</path>
+        </result_source>
+        <count_variants>10</count_variants>
+        <test_header>
+            <line>Header 1</line>
+            <line>Header 2</line>
+        </test_header>
+    </testConfig>
+
+    <variantConfig>
+            <!--<variant_header>-->
+                <!--<line>ПІБ:</line>-->
+                <!--<line>Група:</line>-->
+            <!--</variant_header>-->
+        <variant_footer>
+            <line>Date:</line>
+        </variant_footer>
+        <points>3.5</points>
+        <questions>
+            <question>
+                <sources>
+                    <source>
+                        <question_source>data/questions/question1.xml</question_source>
+                    </source>
+                </sources>
+                <estimation>
+                    <mark>0.5</mark>
+                    <strategy>with_fines</strategy>
+                </estimation>
+            </question>
+
+            <question>
+                <hashtags>
+                    <hashtag>#factorial_seq</hashtag>
+                    <hashtag>#pow_sequence</hashtag>
+                </hashtags>
+                <sources>
+                    <source>
+                        <question_source>data/questions/question2.xml</question_source>
+                    </source>
+                </sources>
+                <estimation>
+                    <mark>2</mark>
+                    <strategy>all_nothing</strategy>
+                </estimation>
+            </question>
+
+            <question>
+                <sources>
+                    <source>
+                        <question_source>data/questions/question3.xml</question_source>
+                    </source>
+                </sources>
+                <estimation>
+                    <mark>2</mark>
+                    <strategy>all_nothing</strategy>
+                </estimation>
+            </question>
+
+            <question>
+                <sources>
+                    <source>
+                        <question_source>data/questions/question4.xml</question_source>
+                    </source>
+                </sources>
+                <estimation>
+                    <mark>1</mark>
+                    <strategy>evenly</strategy>
+                </estimation>
+            </question>
+
+            <question>
+                <sources>
+                    <source>
+                        <question_source>data/questions/question5_1.xml</question_source>
+                        <count_questions>3</count_questions>
+                    </source>
+                    <source>
+                        <question_source>data/questions/question5_2.xml</question_source>
+                        <count_questions>4</count_questions>
+                    </source>
+                </sources>
+                <estimation>
+                    <mark>1</mark>
+                    <strategy>all_nothing</strategy>
+                </estimation>
+            </question>
+
+            <question>
+                <sources>
+                    <source>
+                        <question_source>data/questions/question6.xml</question_source>
+                    </source>
+                </sources>
+                <estimation>
+                    <mark>0.5</mark>
+                    <strategy>evenly</strategy>
+                </estimation>
+            </question>
+
+        </questions>
+    </variantConfig>
+</globalConfig>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:include schemaLocation="question_config.xsd"/>
+
+    <xs:complexType name="variantConfig">
+        <xs:all>
+            <xs:element name="variant_header">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="line" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="variant_footer" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="line" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="points" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="questions">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="question" type="questionConfig" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+</xs:schema>

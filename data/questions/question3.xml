@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<questions>
+    <global_preamble>Чи правда, що</global_preamble>
+
+    <question_yes_no>
+        <preamble>2+2=3?</preamble>
+        <answer>Ні</answer>
+        <formatting_elements>
+            <strategy>rows</strategy>
+        </formatting_elements>
+        <hint>hint1</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>2+3=5?</preamble>
+        <answer>Так</answer>
+        <formatting_elements>
+            <strategy>rows</strategy>
+        </formatting_elements>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>2+3=4?</preamble>
+        <answer>Ні</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint2</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>22./3=22/3?</preamble>
+        <answer>Ні</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint3</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>11+0=11-0?</preamble>
+        <answer>Так</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint4</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>0.=0.?</preamble>
+        <answer>Так</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint5</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>11%-2=1?</preamble>
+        <answer>Так</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint6</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>-11%2=1?</preamble>
+        <answer>Ні</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint7</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>11*(-2)=2*(-11)?</preamble>
+        <answer>Так</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint8</hint>
+    </question_yes_no>
+
+    <question_yes_no>
+        <preamble>a+(b+c)=(a+b)+c</preamble>
+        <answer>Так</answer>
+        <formatting_elements>
+            <strategy>columns</strategy>
+        </formatting_elements>
+        <hint>hint9</hint>
+    </question_yes_no>
+</questions>

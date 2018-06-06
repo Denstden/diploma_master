@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="formatting_elements">
+        <xs:all>
+            <xs:element name="strategy">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="rows"/>
+                        <xs:enumeration value="columns"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="count" type="xs:nonNegativeInteger">
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>

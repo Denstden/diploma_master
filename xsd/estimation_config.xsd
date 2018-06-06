@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="estimationConfig">
+        <xs:all>
+            <xs:element name="mark" type="xs:decimal"/>
+            <xs:element name="strategy">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="all_nothing"/>
+                        <xs:enumeration value="evenly"/>
+                        <xs:enumeration value="with_fines"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+</xs:schema>

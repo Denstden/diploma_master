@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:include schemaLocation="test_config.xsd"/>
+    <xs:include schemaLocation="variant_config.xsd"/>
+
+    <xs:element name="globalConfig">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="testConfig" type="testConfig"/>
+                <xs:element name="variantConfig" type="variantConfig"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

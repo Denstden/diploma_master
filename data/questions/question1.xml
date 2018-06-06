@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<questions>
+    <global_preamble>Вiдмiтити все, що є однiєю правильною лексемою:</global_preamble>
+
+    <question_checkbox>
+        <hash_tag>#operators</hash_tag>
+        <count_answers>6</count_answers>
+        <count_correct_answers>3</count_correct_answers>
+        <count_incorrect_answers>3</count_incorrect_answers>
+        <source_correct_answers>data/questions/answers1+.xml</source_correct_answers>
+        <source_incorrect_answers>data/questions/answers1-.xml</source_incorrect_answers>
+        <formatting_elements>
+            <strategy>columns</strategy>
+            <count>3</count>
+        </formatting_elements>
+    </question_checkbox>
+</questions>

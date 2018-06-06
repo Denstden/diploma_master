@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:include schemaLocation="estimation_config.xsd"/>
+
+    <xs:complexType name="questionConfig">
+        <xs:all>
+            <xs:element name="hashtags" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="hashtag" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="sources">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="source" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="question_source" type="xs:string"/>
+                                    <xs:element name="count_questions" type="xs:nonNegativeInteger" minOccurs="0" default="1"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="estimation" type="estimationConfig"/>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>

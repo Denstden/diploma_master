@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<questions>
+    <global_preamble>Що буде надруковано за виконання: </global_preamble>
+
+    <question_radiobutton>
+        <preamble>int f[]={1,2,3,4,5,6,7,8,9}; printf(f[2]);?</preamble>
+        <count_answers>4</count_answers>
+        <source_correct_answers>data/questions/answers4_1+.xml</source_correct_answers>
+        <source_incorrect_answers>data/questions/answers4_1-.xml</source_incorrect_answers>
+        <formatting_elements>
+            <strategy>columns</strategy>
+            <count>4</count>
+        </formatting_elements>
+    </question_radiobutton>
+
+    <question_radiobutton>
+        <preamble>int f[]={0,3,-4,2,8,7,2,11,-2}; printf(f[2]%f[6]);?</preamble>
+        <count_answers>4</count_answers>
+        <source_correct_answers>data/questions/answers4_2+.xml</source_correct_answers>
+        <source_incorrect_answers>data/questions/answers4_1-.xml</source_incorrect_answers>
+        <formatting_elements>
+            <strategy>columns</strategy>
+            <count>4</count>
+        </formatting_elements>
+    </question_radiobutton>
+</questions>
