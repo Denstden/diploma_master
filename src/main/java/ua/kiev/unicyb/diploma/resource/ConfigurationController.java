@@ -5,87 +5,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ua.kiev.unicyb.diploma.converter.TestConfigConverter;
-import ua.kiev.unicyb.diploma.converter.VariantConfigConverter;
-import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestConfigEntity;
+import ua.kiev.unicyb.diploma.domain.entity.configuration.ConfigurationEntity;
 import ua.kiev.unicyb.diploma.domain.entity.test.TestEntity;
-import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestType;
-import ua.kiev.unicyb.diploma.domain.entity.configuration.variant.VariantConfigEntity;
-import ua.kiev.unicyb.diploma.domain.generated.GlobalConfig;
-import ua.kiev.unicyb.diploma.parser.ConfigurationParser;
-import ua.kiev.unicyb.diploma.service.DatabaseService;
-import ua.kiev.unicyb.diploma.service.TestGenerationService;
+import ua.kiev.unicyb.diploma.exception.UploadFileException;
+import ua.kiev.unicyb.diploma.service.ConfigurationService;
 
-import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @CrossOrigin
 @Slf4j
-@RequestMapping(value = "/configuration")
+@RequestMapping(value = "/api/configurations")
+@PreAuthorize("hasAuthority('TUTOR') or hasAuthority('ADMIN')")
 public class ConfigurationController {
 
-    private final TestGenerationService testGenerationService;
+    private final ConfigurationService configurationService;
 
     @Autowired
-    public ConfigurationController(final TestGenerationService testGenerationService) {
-        this.testGenerationService = testGenerationService;
+    public ConfigurationController(final ConfigurationService configurationService) {
+        this.configurationService = configurationService;
     }
 
-    @Value("${xml.test.configuration.folder}")
-    private String configurationFolder;
-
-    @PostConstruct
-    public void loadConfigurations() throws JAXBException {
-        loadConfiguration("config1.xml");
-        loadConfiguration("config_control1.xml");
+    @RequestMapping(method = RequestMethod.GET)
+    public List<ConfigurationEntity> configurationList() {
+        final String username = getCurrentUsername();
+        return configurationService.configurationList(username);
     }
 
-    @RequestMapping(value = "/loadConfiguration", method = RequestMethod.POST)
-    public TestEntity loadConfiguration(@RequestParam(name = "configFile", defaultValue = "config1.xml") String configFile) throws JAXBException {
-        final GlobalConfig config = ConfigurationParser.parse(configurationFolder + "\\" + configFile);
-
-        return testGenerationService.loadConfig(config);
+    @RequestMapping(method = RequestMethod.PUT)
+    public TestEntity loadConfiguration(@RequestParam(name = "id") Long configId) throws JAXBException, IOException {
+        return configurationService.loadConfiguration(configId);
     }
 
-    @RequestMapping(value = "/loadConfigurationFile", method = RequestMethod.POST)
-    public ResponseEntity loadConfigurationFile(@RequestParam("file") MultipartFile file) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        if (file.getSize() > 0) {
-            try {
-                inputStream = file.getInputStream();
-                outputStream = new FileOutputStream(configurationFolder + "\\"
-                        + file.getOriginalFilename());
-                log.debug("Saved configuration file with name {}", file.getOriginalFilename());
-                int readBytes = 0;
-                byte[] buffer = new byte[8192];
-                while ((readBytes = inputStream.read(buffer, 0, 8192)) != -1) {
-                    outputStream.write(buffer, 0, readBytes);
-                }
-                outputStream.close();
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<String> loadFile(@RequestParam("file") MultipartFile file,
+                                           @RequestParam(value = "configFileName", required = false) String configFileName) {
+        try {
+            final String username = getCurrentUsername();
+            configurationService.loadFile(file, configFileName, username);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (UploadFileException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.PRECONDITION_FAILED);
         }
-
-        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/configurationList", method = RequestMethod.GET)
-    public List<String> configurationList() {
-        File file = new File(configurationFolder);
-        if (file.list() != null) {
-            return Arrays.asList(file.list());
-        } else {
-            return new ArrayList<>();
-        }
+    private String getCurrentUsername() {
+        return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
     }
 }

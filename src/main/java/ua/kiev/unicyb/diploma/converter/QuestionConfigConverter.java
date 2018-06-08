@@ -1,8 +1,12 @@
 package ua.kiev.unicyb.diploma.converter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ua.kiev.unicyb.diploma.domain.entity.configuration.*;
+import ua.kiev.unicyb.diploma.domain.entity.configuration.AnswerDescriptionEntity;
+import ua.kiev.unicyb.diploma.domain.entity.configuration.EstimationStrategy;
+import ua.kiev.unicyb.diploma.domain.entity.configuration.HashTag;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.format.FormattingElementsConfigEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.format.FormattingStrategy;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.*;
@@ -23,6 +27,11 @@ import java.util.List;
 @Slf4j
 public class QuestionConfigConverter implements Converter<QuestionConfigEntity, QuestionConfig> {
     private static final String EOLN = "\r\n";
+
+    @Autowired
+    private ConfigurationParser configurationParser;
+    @Value("${xml.test.configuration.folder}")
+    private String configurationFolder;
 
     @Override
     public QuestionConfigEntity toEntity(QuestionConfig dto) {
@@ -73,7 +82,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
             entity.setCountQuestions(source.getCountQuestions().intValue());
         }
 
-        final Questions questions = ConfigurationParser.parseQuestion(source.getQuestionSource());
+        final Questions questions = configurationParser.parseQuestion(source.getQuestionSource());
         if (questions != null) {
             convertQuestionDescriptions(entity, questions);
         }
@@ -101,13 +110,13 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
 
     private AbstractQuestionDescriptionEntity convertOneQuestionDescription(final Object questionDescriptionFromOneSource) {
         if (questionDescriptionFromOneSource instanceof Questions.QuestionCheckbox) {
-            return convertCheckbox((Questions.QuestionCheckbox)questionDescriptionFromOneSource);
+            return convertCheckbox((Questions.QuestionCheckbox) questionDescriptionFromOneSource);
         } else if (questionDescriptionFromOneSource instanceof Questions.QuestionEssay) {
-            return convertEssay((Questions.QuestionEssay)questionDescriptionFromOneSource);
+            return convertEssay((Questions.QuestionEssay) questionDescriptionFromOneSource);
         } else if (questionDescriptionFromOneSource instanceof Questions.QuestionRadiobutton) {
-            return convertRadiobutton((Questions.QuestionRadiobutton)questionDescriptionFromOneSource);
+            return convertRadiobutton((Questions.QuestionRadiobutton) questionDescriptionFromOneSource);
         } else {
-            return convertYesNo((Questions.QuestionYesNo)questionDescriptionFromOneSource);
+            return convertYesNo((Questions.QuestionYesNo) questionDescriptionFromOneSource);
         }
     }
 
@@ -169,7 +178,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
     }
 
     private FormattingElementsConfigEntity convertFormattingElements(FormattingElements formattingElements) {
-        if (formattingElements != null ) {
+        if (formattingElements != null) {
             final FormattingElementsConfigEntity formattingElementsConfigEntity = new FormattingElementsConfigEntity();
 
             if (formattingElements.getCount() == null) {
@@ -188,7 +197,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
     private List<AnswerDescriptionEntity> convertAnswers(String source, Boolean isCorrect) {
         final List<AnswerDescriptionEntity> answerDescriptionEntities = new ArrayList<>();
 
-        final Answers answers = ConfigurationParser.parseAnswers(source);
+        final Answers answers = configurationParser.parseAnswers(source);
         if (answers != null) {
             final List<Answers.Answer> answerList = answers.getAnswer();
             answerList.forEach(answer -> {
@@ -214,7 +223,6 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         entity.setAnswer(StringUtil.trim(stringBuilder.toString()));
         return entity;
     }
-
 
 
     @Override

@@ -3,6 +3,7 @@
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:include schemaLocation="formatting_elements.xsd"/>
+    <xs:include schemaLocation="parameterized_config.xsd"/>
 
     <xs:element name="questions">
         <xs:complexType>
@@ -10,6 +11,7 @@
                 <xs:element name="global_preamble" type="xs:string" minOccurs="0"/>
 
                 <xs:choice maxOccurs="unbounded">
+
                     <xs:element name="question_checkbox">
                         <xs:complexType>
                             <xs:all>
@@ -20,9 +22,11 @@
                                 <xs:element name="source_incorrect_answers" type="xs:string"/>
                                 <xs:element name="formatting_elements" type="formatting_elements"/>
                                 <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                                <xs:element name="parameterized" type="parameterized" minOccurs="0"/>
                             </xs:all>
                         </xs:complexType>
                     </xs:element>
+
                     <xs:element name="question_yes_no">
                         <xs:complexType>
                             <xs:all>
@@ -30,19 +34,22 @@
                                 <xs:element name="answer" type="xs:string"/>
                                 <xs:element name="formatting_elements" type="formatting_elements"/>
                                 <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                                <xs:element name="parameterized" type="parameterized" minOccurs="0"/>
                             </xs:all>
                         </xs:complexType>
                     </xs:element>
+
                     <xs:element name="question_essay">
                         <xs:complexType>
                             <xs:all>
                                 <xs:element name="preamble" type="xs:string"/>
                                 <xs:element name="formatting_elements" type="formatting_elements"/>
                                 <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                                <xs:element name="parameterized" type="parameterized" minOccurs="0"/>
                             </xs:all>
-
                         </xs:complexType>
                     </xs:element>
+
                     <xs:element name="question_radiobutton">
                         <xs:complexType>
                             <xs:all>
@@ -52,8 +59,8 @@
                                 <xs:element name="source_incorrect_answers" type="xs:string"/>
                                 <xs:element name="formatting_elements" type="formatting_elements"/>
                                 <xs:element name="hash_tag" type="xs:string" minOccurs="0"/>
+                                <xs:element name="parameterized" type="parameterized" minOccurs="0"/>
                             </xs:all>
-
                         </xs:complexType>
                     </xs:element>
                 </xs:choice>

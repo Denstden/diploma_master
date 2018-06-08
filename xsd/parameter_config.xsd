@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="parameter">
+        <xs:all>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="value">
+                <xs:complexType>
+                    <xs:choice>
+                        <xs:element name="diapason">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="min" type="xs:double"/>
+                                    <xs:element name="max" type="xs:double"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="list">
+                            <xs:simpleType>
+                                <xs:list itemType="xs:double"/>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>

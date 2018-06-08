@@ -37,6 +37,7 @@ public class VariantFactory {
 
     private final VariantHeaderConverter variantHeaderConverter;
     private final VariantFooterConverter variantFooterConverter;
+
     private final CheckboxQuestionFactory checkboxQuestionFactory;
     private final RadioButtonQuestionFactory radioButtonQuestionFactory;
     private final YesNoQuestionFactory yesNoQuestionFactory;
