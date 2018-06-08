@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
+@Service
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserDetailsServiceImpl implements UserDetailsService {

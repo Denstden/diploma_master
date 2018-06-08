@@ -2,6 +2,7 @@ package ua.kiev.unicyb.diploma.converter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.kiev.unicyb.diploma.ConfigurationConverter;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.description.QuestionConfigEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.variant.VariantConfigEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.variant.VariantFooterConfigEntity;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class VariantConfigConverter implements Converter<VariantConfigEntity, VariantConfig> {
+public class VariantConfigConverter implements ConfigurationConverter<VariantConfigEntity, VariantConfig> {
     private final QuestionConfigConverter questionConfigConverter;
 
     @Autowired
@@ -24,34 +25,7 @@ public class VariantConfigConverter implements Converter<VariantConfigEntity, Va
 
     @Override
     public VariantConfigEntity toEntity(VariantConfig dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        VariantConfigEntity entity = new VariantConfigEntity();
-
-        convertFooter(dto, entity);
-
-        convertHeader(dto, entity);
-
-        BigDecimal points = dto.getPoints();
-        if (points != null) {
-            entity.setPoints(points.doubleValue());
-        }
-
-        final List<QuestionConfigEntity> questionConfigEntities = new ArrayList<>();
-
-        final VariantConfig.Questions questions = dto.getQuestions();
-        if (questions != null) {
-            final List<QuestionConfig> questionConfigs = questions.getQuestion();
-            questionConfigs.forEach(questionConfig -> {
-                final QuestionConfigEntity configEntity = questionConfigConverter.toEntity(questionConfig);
-                questionConfigEntities.add(configEntity);
-            });
-        }
-        entity.setQuestionConfigs(questionConfigEntities);
-
-        return entity;
+        return null;
     }
 
     private void convertHeader(VariantConfig dto, VariantConfigEntity entity) {
@@ -83,5 +57,37 @@ public class VariantConfigConverter implements Converter<VariantConfigEntity, Va
     @Override
     public VariantConfig toDto(VariantConfigEntity entity) {
         return null;
+    }
+
+    @Override
+    public VariantConfigEntity toEntityWithFile(VariantConfig dto, String filePath) {
+        if (dto == null) {
+            return null;
+        }
+
+        VariantConfigEntity entity = new VariantConfigEntity();
+
+        convertFooter(dto, entity);
+
+        convertHeader(dto, entity);
+
+        BigDecimal points = dto.getPoints();
+        if (points != null) {
+            entity.setPoints(points.doubleValue());
+        }
+
+        final List<QuestionConfigEntity> questionConfigEntities = new ArrayList<>();
+
+        final VariantConfig.Questions questions = dto.getQuestions();
+        if (questions != null) {
+            final List<QuestionConfig> questionConfigs = questions.getQuestion();
+            questionConfigs.forEach(questionConfig -> {
+                final QuestionConfigEntity configEntity = questionConfigConverter.toEntityWithFile(questionConfig, filePath);
+                questionConfigEntities.add(configEntity);
+            });
+        }
+        entity.setQuestionConfigs(questionConfigEntities);
+
+        return entity;
     }
 }

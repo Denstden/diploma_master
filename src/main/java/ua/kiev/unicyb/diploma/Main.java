@@ -1,11 +1,14 @@
 package ua.kiev.unicyb.diploma;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import ua.kiev.unicyb.diploma.security.UserDetailsServiceImpl;
 
 @SpringBootApplication
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class Main extends SpringBootServletInitializer {
 
     @Autowired
@@ -41,7 +45,7 @@ public class Main extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Main.class);
+        return application.sources(Main.class).bannerMode(Banner.Mode.OFF);
     }
 
 

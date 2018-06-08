@@ -26,7 +26,7 @@ public class VariantController {
     VariantService variantService;
     CheckService checkService;
 
-    @RequestMapping(value = "/getVariant", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public VariantEntity getVariant(@RequestParam(name = "testId") Long testId) {
         final VariantEntity variant = variantService.getVariant(testId);
         return variant;

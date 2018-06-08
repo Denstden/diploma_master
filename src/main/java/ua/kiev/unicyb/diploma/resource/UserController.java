@@ -31,7 +31,7 @@ public class UserController {
         userRepository.save(user);
     }
 
-    @GetMapping("/me")
+    @GetMapping
     public ResponseEntity<User> login(@RequestHeader(value = "Authorization") String authorization) {
         if (authorization != null && authorization.startsWith("Basic")) {
             // Authorization: Basic base64credentials

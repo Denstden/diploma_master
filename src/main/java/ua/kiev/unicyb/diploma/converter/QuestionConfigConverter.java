@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ua.kiev.unicyb.diploma.ConfigurationConverter;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.AnswerDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.EstimationStrategy;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.HashTag;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class QuestionConfigConverter implements Converter<QuestionConfigEntity, QuestionConfig> {
+public class QuestionConfigConverter implements ConfigurationConverter<QuestionConfigEntity, QuestionConfig> {
     private static final String EOLN = "\r\n";
 
     @Autowired
@@ -35,16 +36,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
 
     @Override
     public QuestionConfigEntity toEntity(QuestionConfig dto) {
-        QuestionConfigEntity questionConfigEntity = new QuestionConfigEntity();
-
-        convertHashTags(dto.getHashtags(), questionConfigEntity);
-
-        convertQuestionSources(dto.getSources(), questionConfigEntity);
-
-        questionConfigEntity.setMark(dto.getEstimation().getMark().doubleValue());
-        questionConfigEntity.setStrategy(EstimationStrategy.valueOf(dto.getEstimation().getStrategy().toUpperCase()));
-
-        return questionConfigEntity;
+        return null;
     }
 
     private void convertHashTags(QuestionConfig.Hashtags hashTags, QuestionConfigEntity questionConfigEntity) {
@@ -60,13 +52,13 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         }
     }
 
-    private void convertQuestionSources(QuestionConfig.Sources sources, QuestionConfigEntity questionConfigEntity) {
+    private void convertQuestionSources(QuestionConfig.Sources sources, QuestionConfigEntity questionConfigEntity, String filePath) {
         if (sources != null) {
             final List<QuestionConfig.Sources.Source> sourceList = sources.getSource();
             final List<QuestionSourceConfigEntity> questionSourceConfigEntities = new ArrayList<>();
 
             sourceList.forEach(source -> {
-                QuestionSourceConfigEntity entity = convertSource(source);
+                QuestionSourceConfigEntity entity = convertSource(source, filePath);
                 questionSourceConfigEntities.add(entity);
             });
 
@@ -74,7 +66,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         }
     }
 
-    private QuestionSourceConfigEntity convertSource(QuestionConfig.Sources.Source source) {
+    private QuestionSourceConfigEntity convertSource(QuestionConfig.Sources.Source source, String filePath) {
         QuestionSourceConfigEntity entity = new QuestionSourceConfigEntity();
         if (source.getCountQuestions() == null) {
             entity.setCountQuestions(1);
@@ -82,14 +74,26 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
             entity.setCountQuestions(source.getCountQuestions().intValue());
         }
 
-        final Questions questions = configurationParser.parseQuestion(source.getQuestionSource());
+        final Questions questions = configurationParser.parseQuestion(parentFilePath(filePath) + "/" + source.getQuestionSource());
         if (questions != null) {
-            convertQuestionDescriptions(entity, questions);
+            convertQuestionDescriptions(entity, questions, filePath);
+        } else {
+            log.error("Parsing error!");
         }
         return entity;
     }
 
-    private void convertQuestionDescriptions(QuestionSourceConfigEntity entity, Questions questions) {
+    private String parentFilePath(final String childFilePath) {
+        if (childFilePath == null) {
+            return null;
+        }
+
+        final int lastOfSlash = childFilePath.lastIndexOf("/");
+        final int lastOfBackSlash = childFilePath.lastIndexOf("\\");
+        return childFilePath.substring(0, Math.max(lastOfSlash, lastOfBackSlash));
+    }
+
+    private void convertQuestionDescriptions(QuestionSourceConfigEntity entity, Questions questions, String filePath) {
         QuestionDescriptionEntity questionDescriptionEntity = new QuestionDescriptionEntity();
         questionDescriptionEntity.setGlobalPreamble(StringUtil.trim(questions.getGlobalPreamble()));
 
@@ -98,7 +102,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         final List<Object> allQuestionDescriptionsFromOneSource = questions.getQuestionCheckboxOrQuestionYesNoOrQuestionEssay();
 
         allQuestionDescriptionsFromOneSource.forEach(questionDescriptionFromOneSource -> {
-            AbstractQuestionDescriptionEntity abstractQuestionDescriptionEntity = convertOneQuestionDescription(questionDescriptionFromOneSource);
+            AbstractQuestionDescriptionEntity abstractQuestionDescriptionEntity = convertOneQuestionDescription(questionDescriptionFromOneSource, filePath);
             questionConfig.add(abstractQuestionDescriptionEntity);
         });
 
@@ -108,19 +112,19 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         entity.setQuestionDescriptionEntity(questionDescriptionEntity);
     }
 
-    private AbstractQuestionDescriptionEntity convertOneQuestionDescription(final Object questionDescriptionFromOneSource) {
+    private AbstractQuestionDescriptionEntity convertOneQuestionDescription(final Object questionDescriptionFromOneSource, String filePath) {
         if (questionDescriptionFromOneSource instanceof Questions.QuestionCheckbox) {
-            return convertCheckbox((Questions.QuestionCheckbox) questionDescriptionFromOneSource);
+            return convertCheckbox((Questions.QuestionCheckbox) questionDescriptionFromOneSource, filePath);
         } else if (questionDescriptionFromOneSource instanceof Questions.QuestionEssay) {
-            return convertEssay((Questions.QuestionEssay) questionDescriptionFromOneSource);
+            return convertEssay((Questions.QuestionEssay) questionDescriptionFromOneSource, filePath);
         } else if (questionDescriptionFromOneSource instanceof Questions.QuestionRadiobutton) {
-            return convertRadiobutton((Questions.QuestionRadiobutton) questionDescriptionFromOneSource);
+            return convertRadiobutton((Questions.QuestionRadiobutton) questionDescriptionFromOneSource, filePath);
         } else {
-            return convertYesNo((Questions.QuestionYesNo) questionDescriptionFromOneSource);
+            return convertYesNo((Questions.QuestionYesNo) questionDescriptionFromOneSource, filePath);
         }
     }
 
-    private CheckboxQuestionDescriptionEntity convertCheckbox(Questions.QuestionCheckbox questionDescriptionFromOneSource) {
+    private CheckboxQuestionDescriptionEntity convertCheckbox(Questions.QuestionCheckbox questionDescriptionFromOneSource, String filePath) {
         final CheckboxQuestionDescriptionEntity entity = new CheckboxQuestionDescriptionEntity();
 
         entity.setCountCorrectAnswers(questionDescriptionFromOneSource.getCountCorrectAnswers().intValue());
@@ -128,8 +132,8 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         entity.setPreamble(StringUtil.trim(questionDescriptionFromOneSource.getPreamble()));
         entity.setHashTag(questionDescriptionFromOneSource.getHashTag());
 
-        final List<AnswerDescriptionEntity> answerDescriptionEntities = convertAnswers(questionDescriptionFromOneSource.getSourceCorrectAnswers(), true);
-        answerDescriptionEntities.addAll(convertAnswers(questionDescriptionFromOneSource.getSourceIncorrectAnswers(), false));
+        final List<AnswerDescriptionEntity> answerDescriptionEntities = convertAnswers(questionDescriptionFromOneSource.getSourceCorrectAnswers(), true, filePath);
+        answerDescriptionEntities.addAll(convertAnswers(questionDescriptionFromOneSource.getSourceIncorrectAnswers(), false, filePath));
 
         entity.setAnswers(answerDescriptionEntities);
 
@@ -138,7 +142,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         return entity;
     }
 
-    private EssayQuestionDescriptionEntity convertEssay(final Questions.QuestionEssay questionDescriptionFromOneSource) {
+    private EssayQuestionDescriptionEntity convertEssay(final Questions.QuestionEssay questionDescriptionFromOneSource, String filePath) {
         final EssayQuestionDescriptionEntity entity = new EssayQuestionDescriptionEntity();
 
         entity.setHashTag(questionDescriptionFromOneSource.getHashTag());
@@ -148,15 +152,15 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         return entity;
     }
 
-    private RadioButtonQuestionDescriptionEntity convertRadiobutton(final Questions.QuestionRadiobutton questionDescriptionFromOneSource) {
+    private RadioButtonQuestionDescriptionEntity convertRadiobutton(final Questions.QuestionRadiobutton questionDescriptionFromOneSource, String filePath) {
         final RadioButtonQuestionDescriptionEntity entity = new RadioButtonQuestionDescriptionEntity();
 
         entity.setCountAnswers(questionDescriptionFromOneSource.getCountAnswers().intValue());
         entity.setPreamble(StringUtil.trim(questionDescriptionFromOneSource.getPreamble()));
         entity.setHashTag(questionDescriptionFromOneSource.getHashTag());
 
-        final List<AnswerDescriptionEntity> answerDescriptionEntities = convertAnswers(questionDescriptionFromOneSource.getSourceCorrectAnswers(), true);
-        answerDescriptionEntities.addAll(convertAnswers(questionDescriptionFromOneSource.getSourceIncorrectAnswers(), false));
+        final List<AnswerDescriptionEntity> answerDescriptionEntities = convertAnswers(questionDescriptionFromOneSource.getSourceCorrectAnswers(), true, filePath);
+        answerDescriptionEntities.addAll(convertAnswers(questionDescriptionFromOneSource.getSourceIncorrectAnswers(), false, filePath));
 
         entity.setAnswers(answerDescriptionEntities);
 
@@ -165,7 +169,7 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         return entity;
     }
 
-    private YesNoQuestionDescriptionEntity convertYesNo(final Questions.QuestionYesNo questionDescriptionFromOneSource) {
+    private YesNoQuestionDescriptionEntity convertYesNo(final Questions.QuestionYesNo questionDescriptionFromOneSource, String filePath) {
         final YesNoQuestionDescriptionEntity entity = new YesNoQuestionDescriptionEntity();
 
         entity.setPreamble(StringUtil.trim(questionDescriptionFromOneSource.getPreamble()));
@@ -194,10 +198,10 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
         }
     }
 
-    private List<AnswerDescriptionEntity> convertAnswers(String source, Boolean isCorrect) {
+    private List<AnswerDescriptionEntity> convertAnswers(String source, Boolean isCorrect, String filePath) {
         final List<AnswerDescriptionEntity> answerDescriptionEntities = new ArrayList<>();
 
-        final Answers answers = configurationParser.parseAnswers(source);
+        final Answers answers = configurationParser.parseAnswers(parentFilePath(filePath) + "/" + source);
         if (answers != null) {
             final List<Answers.Answer> answerList = answers.getAnswer();
             answerList.forEach(answer -> {
@@ -228,5 +232,19 @@ public class QuestionConfigConverter implements Converter<QuestionConfigEntity, 
     @Override
     public QuestionConfig toDto(QuestionConfigEntity entity) {
         return null;
+    }
+
+    @Override
+    public QuestionConfigEntity toEntityWithFile(QuestionConfig dto, String filePath) {
+        QuestionConfigEntity questionConfigEntity = new QuestionConfigEntity();
+
+        convertHashTags(dto.getHashtags(), questionConfigEntity);
+
+        convertQuestionSources(dto.getSources(), questionConfigEntity, filePath);
+
+        questionConfigEntity.setMark(dto.getEstimation().getMark().doubleValue());
+        questionConfigEntity.setStrategy(EstimationStrategy.valueOf(dto.getEstimation().getStrategy().toUpperCase()));
+
+        return questionConfigEntity;
     }
 }

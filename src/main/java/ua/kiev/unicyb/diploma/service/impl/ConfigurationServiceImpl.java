@@ -16,8 +16,6 @@ import ua.kiev.unicyb.diploma.service.ConfigurationService;
 import ua.kiev.unicyb.diploma.service.TestGenerationService;
 import ua.kiev.unicyb.diploma.service.ZipService;
 
-import javax.annotation.PostConstruct;
-import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,6 +41,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     @Value("${xml.test.configuration.folder}")
     private String configurationFolder;
 
+    @Value("${load.default.configuration.files}")
+    private Boolean needDefaultInit;
+
     @Autowired
     public ConfigurationServiceImpl(final ZipService zipService, final TestGenerationService testGenerationService,
                                     final ConfigurationRepository configurationRepository, final UserRepository userRepository,
@@ -54,16 +55,18 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         this.configurationParser = configurationParser;
     }
 
-    @PostConstruct
+    /*@PostConstruct
     public void loadConfigurations() throws JAXBException, IOException {
-        loadInitialConfiguration("config1.xml");
-        loadInitialConfiguration("config_control1.xml");
+        if (needDefaultInit) {
+            loadInitialConfiguration("config1.xml");
+            loadInitialConfiguration("config_control1.xml");
+        }
     }
 
     private void loadInitialConfiguration(String configFile) throws JAXBException, IOException {
         final GlobalConfig config = configurationParser.parseGlobal(configurationFolder + "\\" + configFile);
         testGenerationService.loadConfig(config);
-    }
+    }*/
 
     @Override
     public void loadFile(final MultipartFile file, String configFileName, final String username) throws UploadFileException, IOException {
@@ -84,13 +87,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
     @Override
-    public TestEntity loadConfiguration(Long configurationId) throws JAXBException, IOException {
+    public TestEntity loadConfiguration(Long configurationId) {
         final ConfigurationEntity configuration = configurationRepository.findOne(configurationId);
         final String pathToConfigFile = getPathToConfigFile(configuration);
 
         final GlobalConfig config = configurationParser.parseGlobal(pathToConfigFile);
 
-        final TestEntity testEntity = testGenerationService.loadConfig(config);
+        final TestEntity testEntity = testGenerationService.loadConfig(config, pathToConfigFile);
         configuration.setIsLoaded(true);
         configurationRepository.save(configuration);
 
@@ -120,28 +123,20 @@ public class ConfigurationServiceImpl implements ConfigurationService {
             final String originalFileName = configurationEntity.getOriginalFileName();
             final String configFileName = configurationEntity.getConfigFileName();
 
-            try {
-                if (configExistsAndCanBeParsed(pathToFolder, originalFileName, configFileName)) {
-                    result.add(configurationEntity);
-                }
-            } catch (IOException e) {
-                log.warn(e.getMessage());
-                e.printStackTrace();
+            if (configExistsAndCanBeParsed(pathToFolder, originalFileName, configFileName)) {
+                result.add(configurationEntity);
             }
+
         });
 
         return result;
     }
 
-    private boolean configExistsAndCanBeParsed(final String pathToFolder, final String originalFileName, final String configFileName) throws IOException {
+    private boolean configExistsAndCanBeParsed(final String pathToFolder, final String originalFileName, final String configFileName) {
         if (pathToFolder != null && originalFileName != null && configFileName != null) {
             final String configFilePath = getPathToConfigFile(pathToFolder, originalFileName, configFileName);
-            try {
-                configurationParser.parseGlobal(configFilePath);
-                return true;
-            } catch (JAXBException e) {
-                return false;
-            }
+            configurationParser.parseGlobal(configFilePath);
+            return true;
         }
         return false;
     }

@@ -15,7 +15,6 @@ import ua.kiev.unicyb.diploma.domain.entity.test.TestEntity;
 import ua.kiev.unicyb.diploma.exception.UploadFileException;
 import ua.kiev.unicyb.diploma.service.ConfigurationService;
 
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class ConfigurationController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public TestEntity loadConfiguration(@RequestParam(name = "id") Long configId) throws JAXBException, IOException {
+    public TestEntity loadConfiguration(@RequestParam(name = "id") Long configId) {
         return configurationService.loadConfiguration(configId);
     }
 

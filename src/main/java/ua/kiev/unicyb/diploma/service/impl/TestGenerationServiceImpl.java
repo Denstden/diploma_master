@@ -44,9 +44,9 @@ public class TestGenerationServiceImpl implements TestGenerationService {
     }
 
     @Override
-    public TestEntity loadConfig(GlobalConfig config) {
+    public TestEntity loadConfig(GlobalConfig config, String path) {
         TestConfigEntity testConfigEntity = testConfigConverter.toEntity(config.getTestConfig());
-        VariantConfigEntity variantConfigEntity = variantConfigConverter.toEntity(config.getVariantConfig());
+        VariantConfigEntity variantConfigEntity = variantConfigConverter.toEntityWithFile(config.getVariantConfig(), path);
         testConfigEntity.setVariantConfig(variantConfigEntity);
 
         testConfigEntity = databaseService.saveTestConfig(testConfigEntity);
@@ -95,4 +95,5 @@ public class TestGenerationServiceImpl implements TestGenerationService {
 
         return testEntity;
     }
+
 }
