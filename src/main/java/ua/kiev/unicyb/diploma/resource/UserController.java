@@ -5,15 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-import ua.kiev.unicyb.diploma.domain.entity.user.User;
-import ua.kiev.unicyb.diploma.repositories.UserRepository;
-
-import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.Charset;
-import java.security.Principal;
-import java.util.Base64;
+import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
+import ua.kiev.unicyb.diploma.dto.request.UserDto;
+import ua.kiev.unicyb.diploma.service.UserService;
 
 @RestController
 @CrossOrigin
@@ -22,27 +19,24 @@ import java.util.Base64;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserController {
 
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-    UserRepository userRepository;
+    UserService userService;
 
     @PostMapping("/register")
-    public void signUp(@RequestBody User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+    public ResponseEntity<UserEntity> register(@RequestBody UserDto user) {
+        return new ResponseEntity<>(userService.register(user), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<User> login(@RequestHeader(value = "Authorization") String authorization) {
-        if (authorization != null && authorization.startsWith("Basic")) {
-            // Authorization: Basic base64credentials
-            String base64Credentials = authorization.substring("Basic".length()).trim();
-            String credentials = new String(Base64.getDecoder().decode(base64Credentials),
-                    Charset.forName("UTF-8"));
-            // credentials = username:password
-            final String[] values = credentials.split(":", 2);
-            if (values.length == 2) {
-                return new ResponseEntity<>(userRepository.findByUsername(values[0]), HttpStatus.OK);
+    public ResponseEntity<UserEntity> userInfo() {
+
+        final boolean isAuthenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+
+        if (isAuthenticated) {
+            final User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            if (user != null) {
+                return new ResponseEntity<>(userService.findByUsername(user.getUsername()), HttpStatus.OK);
             }
+
         }
 
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

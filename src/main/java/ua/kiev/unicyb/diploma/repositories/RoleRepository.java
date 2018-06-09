@@ -7,4 +7,5 @@ import ua.kiev.unicyb.diploma.domain.entity.user.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
+    Role findByName(String name);
 }

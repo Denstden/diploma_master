@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import ua.kiev.unicyb.diploma.domain.entity.user.User;
+import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -48,5 +47,5 @@ public class ConfigurationEntity {
     @ManyToOne(cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.PERSIST})
     @JoinColumn(name="USER_ID")
     @JsonIgnore
-    private User user;
+    private UserEntity user;
 }

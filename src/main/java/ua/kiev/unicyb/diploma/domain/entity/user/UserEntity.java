@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "USER_TBL")
 @Getter
 @Setter
-public class User {
+public class UserEntity {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="user_id_gen")
