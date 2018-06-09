@@ -24,7 +24,7 @@ Resources:
             --name diploma-server \
             -e SPRING_POSTGRES_DATASOURCE_URL=jdbc:postgresql://172.31.0.42:5432/diploma_db \
             -e LOGGING_LEVEL=info \
-            -e LOGGING_LEVEL_ORG=info \
+            -e LOGGING_LEVEL_ORG_HIBERNATE=info \
             -e LOGGING_LEVEL_UA_KIEV=debug \
             -e SERVER_PORT=8080 \
             -p 8080:8080 \

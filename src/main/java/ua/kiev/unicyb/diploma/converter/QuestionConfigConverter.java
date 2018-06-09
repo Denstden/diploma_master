@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ua.kiev.unicyb.diploma.ConfigurationConverter;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.AnswerDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.EstimationStrategy;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.HashTag;

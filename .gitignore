@@ -3,7 +3,7 @@
 .idea/*
 */.idea/*
 .gradle/*
-schema/*
+*/schema/*
 build/*
 out/*
 

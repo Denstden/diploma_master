@@ -1,4 +1,4 @@
-package ua.kiev.unicyb.diploma;
+package ua.kiev.unicyb.diploma.converter;
 
 import ua.kiev.unicyb.diploma.converter.Converter;
 
