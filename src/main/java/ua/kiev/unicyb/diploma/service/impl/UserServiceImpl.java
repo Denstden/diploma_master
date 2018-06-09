@@ -8,11 +8,14 @@ import ua.kiev.unicyb.diploma.converter.UserConverter;
 import ua.kiev.unicyb.diploma.domain.entity.user.Role;
 import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
 import ua.kiev.unicyb.diploma.dto.request.UserDto;
-import ua.kiev.unicyb.diploma.repositories.RoleRepository;
-import ua.kiev.unicyb.diploma.repositories.UserRepository;
+import ua.kiev.unicyb.diploma.repositories.user.RoleRepository;
+import ua.kiev.unicyb.diploma.repositories.user.UserRepository;
 import ua.kiev.unicyb.diploma.service.UserService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,6 +53,20 @@ public class UserServiceImpl implements UserService {
         final UserEntity entity = userConverter.toEntity(userDto);
         setDefaultRole(entity);
         return save(entity);
+    }
+
+    @Override
+    public Iterable<UserEntity> allUsersByRole(String roleName) {
+
+        final Role role = roleRepository.findByName(roleName);
+        if (role == null) {
+            return new ArrayList<>();
+        }
+
+        final Set<Role> roleSet = new HashSet<>();
+        roleSet.add(role);
+
+        return userRepository.findByRolesIn(roleSet);
     }
 
     private void setDefaultRole(UserEntity entity) {

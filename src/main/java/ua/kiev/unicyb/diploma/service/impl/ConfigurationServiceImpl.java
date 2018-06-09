@@ -8,10 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.ConfigurationEntity;
 import ua.kiev.unicyb.diploma.domain.entity.test.TestEntity;
 import ua.kiev.unicyb.diploma.domain.generated.GlobalConfig;
+import ua.kiev.unicyb.diploma.exception.ConfigurationException;
 import ua.kiev.unicyb.diploma.exception.UploadFileException;
 import ua.kiev.unicyb.diploma.parser.ConfigurationParser;
-import ua.kiev.unicyb.diploma.repositories.ConfigurationRepository;
-import ua.kiev.unicyb.diploma.repositories.UserRepository;
+import ua.kiev.unicyb.diploma.repositories.config.ConfigurationRepository;
+import ua.kiev.unicyb.diploma.repositories.user.UserRepository;
 import ua.kiev.unicyb.diploma.service.ConfigurationService;
 import ua.kiev.unicyb.diploma.service.TestGenerationService;
 import ua.kiev.unicyb.diploma.service.ZipService;
@@ -89,6 +90,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     @Override
     public TestEntity loadConfiguration(Long configurationId) {
         final ConfigurationEntity configuration = configurationRepository.findOne(configurationId);
+        if (configuration.getIsLoaded()) {
+            throw new ConfigurationException("Configuration with id " + configurationId + " were loaded yet");
+        }
         final String pathToConfigFile = getPathToConfigFile(configuration);
 
         final GlobalConfig config = configurationParser.parseGlobal(pathToConfigFile);
@@ -105,8 +109,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         configurationEntity.setPathToFolder(configurationFolder);
         configurationEntity.setFolderName(configurationName);
 
-        configurationEntity.setOriginalFileName(getWithoutExtension(originalFileName));
-        configFileName = (configFileName == null ? getWithoutExtension(originalFileName) + XML_EXTENSION : configFileName);
+        final String originalNameWithoutExtension = getWithoutExtension(originalFileName);
+        configurationEntity.setOriginalFileName(originalNameWithoutExtension);
+        configFileName = (configFileName == null ? originalNameWithoutExtension + XML_EXTENSION : configFileName);
         configurationEntity.setConfigFileName(configFileName);
         configurationEntity.setUser(userRepository.findByUsername(username));
 

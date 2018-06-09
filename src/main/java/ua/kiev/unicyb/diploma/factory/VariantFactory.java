@@ -33,8 +33,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @Slf4j
 public class VariantFactory {
 
-    private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
-
     private final VariantHeaderConverter variantHeaderConverter;
     private final VariantFooterConverter variantFooterConverter;
 
@@ -119,7 +117,7 @@ public class VariantFactory {
     private QuestionEntity processOneQuestionDescription(QuestionDescriptionEntity questionDescriptionEntity, EstimationStrategy estimationStrategy, Double mark) {
         final List<AbstractQuestionDescriptionEntity> questionDescriptions = questionDescriptionEntity.getQuestionConfigs();
         final AbstractQuestionDescriptionEntity randomQuestionDescription =
-                questionDescriptions.get(RANDOM.nextInt(questionDescriptions.size()));
+                questionDescriptions.get(ThreadLocalRandom.current().nextInt(questionDescriptions.size()));
 
         if (randomQuestionDescription instanceof CheckboxQuestionDescriptionEntity) {
             initBuilder(checkboxQuestionFactory.getQuestionBuilder(), randomQuestionDescription, questionDescriptionEntity.getGlobalPreamble(), estimationStrategy, mark, QuestionType.CHECKBOX);

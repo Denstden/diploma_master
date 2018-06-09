@@ -3,9 +3,12 @@ package ua.kiev.unicyb.diploma.domain.entity.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import ua.kiev.unicyb.diploma.domain.entity.test.TestEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,4 +37,8 @@ public class UserEntity {
             = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(mappedBy="users")
+    @JsonIgnore
+    private List<TestEntity> tests = new ArrayList<>();
 }

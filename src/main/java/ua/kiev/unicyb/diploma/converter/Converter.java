@@ -9,6 +9,9 @@ public interface Converter<E, D> {
     D toDto(E entity);
 
     default List<E> toEntities(List<D> dtos) {
+        if (dtos == null) {
+            return null;
+        }
         List<E> list = new ArrayList<>();
 
         dtos.forEach(dto -> {

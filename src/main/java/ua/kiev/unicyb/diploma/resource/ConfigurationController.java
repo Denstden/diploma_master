@@ -22,7 +22,7 @@ import java.util.List;
 @CrossOrigin
 @Slf4j
 @RequestMapping(value = "/api/configurations")
-@PreAuthorize("hasAuthority('TUTOR') or hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('TUTOR')")
 public class ConfigurationController {
 
     private final ConfigurationService configurationService;

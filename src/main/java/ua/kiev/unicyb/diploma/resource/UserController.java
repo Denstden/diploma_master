@@ -14,7 +14,7 @@ import ua.kiev.unicyb.diploma.service.UserService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserController {
@@ -27,6 +27,11 @@ public class UserController {
     }
 
     @GetMapping
+    public Iterable<UserEntity> findByRole(@RequestParam(name = "role") String role) {
+        return userService.allUsersByRole(role.toUpperCase());
+    }
+
+    @GetMapping("/")
     public ResponseEntity<UserEntity> userInfo() {
 
         final boolean isAuthenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();

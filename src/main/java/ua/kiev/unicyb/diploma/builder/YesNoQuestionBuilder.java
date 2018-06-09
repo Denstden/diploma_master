@@ -8,6 +8,7 @@ import ua.kiev.unicyb.diploma.domain.entity.answer.QuestionAnswerEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.RadioButtonQuestionDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.YesNoQuestionDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.question.QuestionEntity;
+import ua.kiev.unicyb.diploma.service.ParameterizedService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,11 @@ public class YesNoQuestionBuilder extends AbstractQuestionBuilder {
 
     @Autowired
     public YesNoQuestionBuilder(final FormattingElementsConverter formattingElementsConverter,
-                                final QuestionAnswerConverter questionAnswerConverter) {
-        super(formattingElementsConverter, questionAnswerConverter);
+                                final QuestionAnswerConverter questionAnswerConverter,
+                                final ParameterizedService parameterizedService) {
+        super(formattingElementsConverter, questionAnswerConverter, parameterizedService);
     }
+
 
     @Override
     public QuestionEntity build() {

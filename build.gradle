@@ -66,6 +66,7 @@ dependencies {
     compile 'io.springfox:springfox-swagger-ui:2.7.0'
     compile 'io.springfox:springfox-swagger2:2.7.0'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    compile 'com.creativewidgetworks:expression-evaluator:2.2.5'
 //    compile 'org.springframework.security.oauth:spring-security-oauth2:2.1.0.RELEASE'
     compileOnly('org.projectlombok:lombok')
     runtime('org.postgresql:postgresql')

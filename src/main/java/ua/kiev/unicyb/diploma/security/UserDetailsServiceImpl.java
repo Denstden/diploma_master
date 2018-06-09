@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kiev.unicyb.diploma.domain.entity.user.Role;
 import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
-import ua.kiev.unicyb.diploma.repositories.RoleRepository;
-import ua.kiev.unicyb.diploma.repositories.UserRepository;
+import ua.kiev.unicyb.diploma.repositories.user.RoleRepository;
+import ua.kiev.unicyb.diploma.repositories.user.UserRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;

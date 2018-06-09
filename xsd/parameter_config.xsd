@@ -2,23 +2,33 @@
 <xs:schema elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+    <xs:simpleType name="parameter_type" final="restriction" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LONG" />
+            <xs:enumeration value="INTEGER" />
+            <xs:enumeration value="DOUBLE" />
+            <xs:enumeration value="BOOLEAN" />
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:complexType name="parameter">
         <xs:all>
             <xs:element name="name" type="xs:string"/>
+            <xs:element name="type" type="parameter_type"/>
             <xs:element name="value">
                 <xs:complexType>
                     <xs:choice>
                         <xs:element name="diapason">
                             <xs:complexType>
                                 <xs:all>
-                                    <xs:element name="min" type="xs:double"/>
-                                    <xs:element name="max" type="xs:double"/>
+                                    <xs:element name="min" type="xs:string"/>
+                                    <xs:element name="max" type="xs:string"/>
                                 </xs:all>
                             </xs:complexType>
                         </xs:element>
                         <xs:element name="list">
                             <xs:simpleType>
-                                <xs:list itemType="xs:double"/>
+                                <xs:list itemType="xs:string"/>
                             </xs:simpleType>
                         </xs:element>
                     </xs:choice>

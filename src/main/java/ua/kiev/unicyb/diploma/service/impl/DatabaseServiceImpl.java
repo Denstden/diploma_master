@@ -6,9 +6,9 @@ import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestConfigEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestType;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.variant.VariantConfigEntity;
 import ua.kiev.unicyb.diploma.domain.entity.test.TestEntity;
-import ua.kiev.unicyb.diploma.repositories.TestConfigRepository;
+import ua.kiev.unicyb.diploma.repositories.config.TestConfigRepository;
 import ua.kiev.unicyb.diploma.repositories.TestRepository;
-import ua.kiev.unicyb.diploma.repositories.VariantConfigRepository;
+import ua.kiev.unicyb.diploma.repositories.config.VariantConfigRepository;
 import ua.kiev.unicyb.diploma.service.DatabaseService;
 import ua.kiev.unicyb.diploma.service.TrainingTestService;
 

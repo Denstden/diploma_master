@@ -1,10 +1,14 @@
 package ua.kiev.unicyb.diploma.service;
 
+import ua.kiev.unicyb.diploma.domain.entity.user.Role;
 import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
 import ua.kiev.unicyb.diploma.dto.request.UserDto;
+
+import java.util.List;
 
 public interface UserService {
     UserEntity save(UserEntity userEntity);
     UserEntity findByUsername(String username);
     UserEntity register(UserDto userDto);
+    Iterable<UserEntity> allUsersByRole(String role);
 }

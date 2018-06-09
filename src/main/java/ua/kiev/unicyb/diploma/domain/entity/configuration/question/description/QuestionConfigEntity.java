@@ -3,6 +3,7 @@ package ua.kiev.unicyb.diploma.domain.entity.configuration.question.description;
 import lombok.Setter;import lombok.Getter;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.EstimationStrategy;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.HashTag;
+import ua.kiev.unicyb.diploma.domain.entity.configuration.question.parameterized.ParameterizedEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;

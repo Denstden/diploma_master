@@ -1,4 +1,4 @@
-package ua.kiev.unicyb.diploma.repositories;
+package ua.kiev.unicyb.diploma.repositories.config;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

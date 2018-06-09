@@ -1,6 +1,7 @@
 package ua.kiev.unicyb.diploma.domain.entity.question;
 
-import lombok.Setter;import lombok.Getter;
+import lombok.Getter;
+import lombok.Setter;
 import ua.kiev.unicyb.diploma.domain.entity.EstimationEntity;
 import ua.kiev.unicyb.diploma.domain.entity.FormattingElementsEntity;
 import ua.kiev.unicyb.diploma.domain.entity.answer.QuestionAnswerEntity;

@@ -42,20 +42,9 @@ public class CheckServiceImpl implements CheckService {
             final VariantEntity variant = variantRepository.findOne(variantId);
 
             setComplete(variantCheckDto, variant);
+            check(variantAnswersDto, variantCheckDto);
 
-            AtomicReference<Double> points = new AtomicReference<>(0d);
-
-            final List<QuestionAnswersDto> questionAnswersList = variantAnswersDto.getQuestionAnswers();
-            if (questionAnswersList != null) {
-                questionAnswersList.forEach(questionAnswers -> {
-                    final Double pointsForQuestion = checkQuestionAnswers(questionAnswers);
-                    points.updateAndGet(v -> v + pointsForQuestion);
-                });
-            }
-
-            final Double mark = variant.getMark();
-            variantCheckDto.setTotal(mark);
-            variantCheckDto.setPoints(Double.valueOf(DECIMAL_FORMAT.format(points.get())));
+            variantCheckDto.setTotal(variant.getMark());
         }
 
         return variantCheckDto;
@@ -67,6 +56,20 @@ public class CheckServiceImpl implements CheckService {
         variantCheckDto.setIsComplete(!isEssayQuestionPresent);
     }
 
+    private void check(VariantAnswersDto variantAnswersDto, VariantCheckDto variantCheckDto) {
+        final AtomicReference<Double> points = new AtomicReference<>(0d);
+
+        final List<QuestionAnswersDto> questionAnswersList = variantAnswersDto.getQuestionAnswers();
+        if (questionAnswersList != null) {
+            questionAnswersList.forEach(questionAnswers -> {
+                final Double pointsForQuestion = checkQuestionAnswers(questionAnswers);
+                points.updateAndGet(v -> v + pointsForQuestion);
+            });
+        }
+
+        variantCheckDto.setPoints(Double.valueOf(DECIMAL_FORMAT.format(points.get())));
+    }
+
     private Double checkQuestionAnswers(final QuestionAnswersDto questionAnswers) {
         if (questionAnswers == null) {
             return 0d;
@@ -76,6 +79,7 @@ public class CheckServiceImpl implements CheckService {
         final QuestionEntity question = questionRepository.findOne(questionId);
 
         if (question == null) {
+            log.error("{}: question == null", questionId);
             return 0d;
         } else {
             final List<String> answersFromClient = questionAnswers.getAnswerIds();

@@ -8,6 +8,7 @@ import ua.kiev.unicyb.diploma.domain.entity.answer.QuestionAnswerEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.AnswerDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.CheckboxQuestionDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.question.QuestionEntity;
+import ua.kiev.unicyb.diploma.service.ParameterizedService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +20,9 @@ public class CheckboxQuestionBuilder extends AbstractQuestionBuilder {
 
     @Autowired
     public CheckboxQuestionBuilder(final FormattingElementsConverter formattingElementsConverter,
-                                   final QuestionAnswerConverter questionAnswerConverter) {
-        super(formattingElementsConverter, questionAnswerConverter);
+                                   final QuestionAnswerConverter questionAnswerConverter,
+                                   final ParameterizedService parameterizedService) {
+        super(formattingElementsConverter, questionAnswerConverter, parameterizedService);
     }
 
     @Override

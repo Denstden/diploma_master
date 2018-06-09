@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;import lombok.Getter;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestConfigEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestType;
+import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
 import ua.kiev.unicyb.diploma.domain.entity.variant.VariantEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Table(name = "TEST")
 @Entity
@@ -39,5 +42,12 @@ public class TestEntity {
     @JoinColumn(name = "TEST_CONFIG_ID")
     @JsonIgnore
     private TestConfigEntity testConfig;
+
+    @ManyToMany
+    @JoinTable(name = "TEST_USER",
+            joinColumns = { @JoinColumn(name = "TEST_ID") },
+            inverseJoinColumns = { @JoinColumn(name = "USER_ID") })
+    @JsonIgnore
+    private Set<UserEntity> users = new HashSet<>();
 
 }

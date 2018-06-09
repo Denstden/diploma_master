@@ -30,12 +30,34 @@ public class QuestionConfigConverter implements ConfigurationConverter<QuestionC
 
     @Autowired
     private ConfigurationParser configurationParser;
+    @Autowired
+    private ParameterizedConverter parameterizedConverter;
+
     @Value("${xml.test.configuration.folder}")
     private String configurationFolder;
 
     @Override
     public QuestionConfigEntity toEntity(QuestionConfig dto) {
         return null;
+    }
+
+    @Override
+    public QuestionConfig toDto(QuestionConfigEntity entity) {
+        return null;
+    }
+
+    @Override
+    public QuestionConfigEntity toEntityWithFile(QuestionConfig dto, String filePath) {
+        QuestionConfigEntity questionConfigEntity = new QuestionConfigEntity();
+
+        convertHashTags(dto.getHashtags(), questionConfigEntity);
+
+        convertQuestionSources(dto.getSources(), questionConfigEntity, filePath);
+
+        questionConfigEntity.setMark(dto.getEstimation().getMark().doubleValue());
+        questionConfigEntity.setStrategy(EstimationStrategy.valueOf(dto.getEstimation().getStrategy().toUpperCase()));
+
+        return questionConfigEntity;
     }
 
     private void convertHashTags(QuestionConfig.Hashtags hashTags, QuestionConfigEntity questionConfigEntity) {
@@ -137,7 +159,7 @@ public class QuestionConfigConverter implements ConfigurationConverter<QuestionC
         entity.setAnswers(answerDescriptionEntities);
 
         entity.setFormattingElements(convertFormattingElements(questionDescriptionFromOneSource.getFormattingElements()));
-
+        entity.setParameterized(parameterizedConverter.toEntity(questionDescriptionFromOneSource.getParameterized()));
         return entity;
     }
 
@@ -147,6 +169,7 @@ public class QuestionConfigConverter implements ConfigurationConverter<QuestionC
         entity.setHashTag(questionDescriptionFromOneSource.getHashTag());
         entity.setPreamble(StringUtil.trim(questionDescriptionFromOneSource.getPreamble()));
         entity.setFormattingElements(convertFormattingElements(questionDescriptionFromOneSource.getFormattingElements()));
+        entity.setParameterized(parameterizedConverter.toEntity(questionDescriptionFromOneSource.getParameterized()));
 
         return entity;
     }
@@ -164,6 +187,7 @@ public class QuestionConfigConverter implements ConfigurationConverter<QuestionC
         entity.setAnswers(answerDescriptionEntities);
 
         entity.setFormattingElements(convertFormattingElements(questionDescriptionFromOneSource.getFormattingElements()));
+        entity.setParameterized(parameterizedConverter.toEntity(questionDescriptionFromOneSource.getParameterized()));
 
         return entity;
     }
@@ -176,6 +200,7 @@ public class QuestionConfigConverter implements ConfigurationConverter<QuestionC
         entity.setAnswer(Boolean.valueOf(questionDescriptionFromOneSource.getAnswer()));
 
         entity.setFormattingElements(convertFormattingElements(questionDescriptionFromOneSource.getFormattingElements()));
+        entity.setParameterized(parameterizedConverter.toEntity(questionDescriptionFromOneSource.getParameterized()));
 
         return entity;
     }
@@ -225,25 +250,5 @@ public class QuestionConfigConverter implements ConfigurationConverter<QuestionC
 
         entity.setAnswer(StringUtil.trim(stringBuilder.toString()));
         return entity;
-    }
-
-
-    @Override
-    public QuestionConfig toDto(QuestionConfigEntity entity) {
-        return null;
-    }
-
-    @Override
-    public QuestionConfigEntity toEntityWithFile(QuestionConfig dto, String filePath) {
-        QuestionConfigEntity questionConfigEntity = new QuestionConfigEntity();
-
-        convertHashTags(dto.getHashtags(), questionConfigEntity);
-
-        convertQuestionSources(dto.getSources(), questionConfigEntity, filePath);
-
-        questionConfigEntity.setMark(dto.getEstimation().getMark().doubleValue());
-        questionConfigEntity.setStrategy(EstimationStrategy.valueOf(dto.getEstimation().getStrategy().toUpperCase()));
-
-        return questionConfigEntity;
     }
 }

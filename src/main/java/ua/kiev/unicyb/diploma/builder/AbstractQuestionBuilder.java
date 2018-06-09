@@ -8,8 +8,10 @@ import ua.kiev.unicyb.diploma.domain.entity.answer.QuestionAnswerEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.AnswerDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.EstimationStrategy;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.AbstractQuestionDescriptionEntity;
+import ua.kiev.unicyb.diploma.domain.entity.configuration.question.parameterized.ParameterizedEntity;
 import ua.kiev.unicyb.diploma.domain.entity.question.QuestionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.question.QuestionType;
+import ua.kiev.unicyb.diploma.service.ParameterizedService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,13 +27,16 @@ public abstract class AbstractQuestionBuilder {
     protected Double mark;
     protected QuestionType questionType;
 
-    private final FormattingElementsConverter formattingElementsConverter;
     protected final QuestionAnswerConverter answerConverter;
+    private final FormattingElementsConverter formattingElementsConverter;
+    private final ParameterizedService parameterizedService;
 
     public AbstractQuestionBuilder(final FormattingElementsConverter formattingElementsConverter,
-                                   final QuestionAnswerConverter questionAnswerConverter) {
-        this.formattingElementsConverter = formattingElementsConverter;
+                                   final QuestionAnswerConverter questionAnswerConverter,
+                                   final ParameterizedService parameterizedService) {
         this.answerConverter = questionAnswerConverter;
+        this.formattingElementsConverter = formattingElementsConverter;
+        this.parameterizedService = parameterizedService;
     }
 
     public abstract QuestionEntity build();
@@ -48,18 +53,31 @@ public abstract class AbstractQuestionBuilder {
         return questionEntity;
     }
 
+    protected boolean isParameterized() {
+        return questionDescription.getParameterized() != null;
+    }
+
     private String concatPreambles() {
         final StringBuilder result = new StringBuilder();
         if (globalPreamble != null) {
             result.append(globalPreamble);
         }
 
-        final String preamble = questionDescription.getPreamble();
+        String preamble = questionDescription.getPreamble();
         if (preamble != null) {
+            preamble = processParameterized(questionDescription.getParameterized(), preamble);
             result.append(PREAMBLE_SEPARATOR).append(preamble);
         }
 
         return result.toString();
+    }
+
+    private String processParameterized(ParameterizedEntity parameterized, String preamble) {
+        if (parameterized != null) {
+            return parameterizedService.processParameterized(parameterized, preamble);
+        } else {
+            return preamble;
+        }
     }
 
     private EstimationEntity convertEstimation(EstimationStrategy strategy, Double mark) {
@@ -76,7 +94,7 @@ public abstract class AbstractQuestionBuilder {
         Collections.shuffle(answers);
 
         for (int i = 0; i < count; i++) {
-            randomNAnswers.add(answerConverter.toEntity(answers.get(i)));
+            randomNAnswers.add(answerConverter.toEntity(answers.get(i), questionDescription.getParameterized()));
         }
 
         return randomNAnswers;

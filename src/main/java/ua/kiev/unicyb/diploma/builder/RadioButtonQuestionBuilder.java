@@ -9,6 +9,7 @@ import ua.kiev.unicyb.diploma.domain.entity.configuration.AnswerDescriptionEntit
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.CheckboxQuestionDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.RadioButtonQuestionDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.question.QuestionEntity;
+import ua.kiev.unicyb.diploma.service.ParameterizedService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,9 +18,12 @@ import java.util.stream.Collectors;
 public class RadioButtonQuestionBuilder extends AbstractQuestionBuilder {
 
     @Autowired
-    public RadioButtonQuestionBuilder(FormattingElementsConverter formattingElementsConverter, QuestionAnswerConverter questionAnswerConverter) {
-        super(formattingElementsConverter, questionAnswerConverter);
+    public RadioButtonQuestionBuilder(final FormattingElementsConverter formattingElementsConverter,
+                                      final QuestionAnswerConverter questionAnswerConverter,
+                                      final ParameterizedService parameterizedService) {
+        super(formattingElementsConverter, questionAnswerConverter, parameterizedService);
     }
+
 
     @Override
     public QuestionEntity build() {

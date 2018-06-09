@@ -3,6 +3,7 @@ package ua.kiev.unicyb.diploma.domain.entity.configuration.question;
 import lombok.Setter;import lombok.Getter;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.AnswerDescriptionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.format.FormattingElementsConfigEntity;
+import ua.kiev.unicyb.diploma.domain.entity.configuration.question.parameterized.ParameterizedEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,4 +33,8 @@ public abstract class AbstractQuestionDescriptionEntity {
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "FORMATTING_ELEMENTS_CONFIG_ID")
     protected FormattingElementsConfigEntity formattingElements;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "PARAMETERIZED_ID")
+    private ParameterizedEntity parameterized;
 }
