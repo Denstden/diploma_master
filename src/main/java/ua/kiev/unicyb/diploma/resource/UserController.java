@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('TUTOR') or hasAuthority('ADMIN')")
     public Iterable<UserEntity> findByRole(@RequestParam(name = "role") String role) {
         return userService.allUsersByRole(role.toUpperCase());
     }

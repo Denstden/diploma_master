@@ -42,4 +42,7 @@ public class QuestionEntity {
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "ESTIMATION_ID")
     private EstimationEntity estimation;
+
+    @Column
+    private boolean isChecked = false;
 }

@@ -33,9 +33,8 @@ public class TestController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('TUTOR')")
-    public ResponseEntity assignTestToUsers(@RequestBody AssignTestDto assignTestDto) {
-       testService.assignTestToUsers(assignTestDto);
-       return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<TestEntity> assignTestToUsers(@RequestBody AssignTestDto assignTestDto) {
+        return new ResponseEntity<>(testService.assignTestToUsers(assignTestDto), HttpStatus.OK);
     }
 
 

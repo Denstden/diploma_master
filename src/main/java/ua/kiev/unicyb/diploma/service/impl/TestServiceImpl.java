@@ -63,7 +63,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void assignTestToUsers(AssignTestDto assignTestDto) {
+    public TestEntity assignTestToUsers(AssignTestDto assignTestDto) {
         if (assignTestDto == null || assignTestDto.getTestId() == null) {
             throw new TestGenerationSystemException("Test id should be not null");
         }
@@ -76,10 +76,17 @@ public class TestServiceImpl implements TestService {
             final Iterable<UserEntity> users = userRepository.findAll(userIds);
 
             test.getUsers().addAll(newHashSet(users));
-            testRepository.save(test);
+            return testRepository.save(test);
         } else {
             throw new TestGenerationSystemException("Can not find test by test id " + testId);
         }
 
+    }
+
+    @Override
+    public TestEntity unAssignTest(TestEntity test) {
+        final String username = authenticationService.getCurrentUsername();
+        test.getUsers().removeIf(user -> user.getUsername().equals(username));
+        return testRepository.save(test);
     }
 }

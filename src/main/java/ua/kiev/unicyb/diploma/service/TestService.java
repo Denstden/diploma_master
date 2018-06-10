@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface TestService {
     Iterable<TestEntity> getTests(TestType testType);
-    void assignTestToUsers(AssignTestDto assignTestDto);
+    TestEntity assignTestToUsers(AssignTestDto assignTestDto);
+    TestEntity unAssignTest(TestEntity testEntity);
 }

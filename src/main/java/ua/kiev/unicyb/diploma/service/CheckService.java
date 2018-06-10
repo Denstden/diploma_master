@@ -1,8 +1,10 @@
 package ua.kiev.unicyb.diploma.service;
 
+import ua.kiev.unicyb.diploma.domain.entity.answer.VariantCheckResultEntity;
+import ua.kiev.unicyb.diploma.dto.request.CheckQuestionDto;
 import ua.kiev.unicyb.diploma.dto.request.VariantAnswersDto;
-import ua.kiev.unicyb.diploma.dto.response.VariantCheckDto;
 
 public interface CheckService {
-    VariantCheckDto checkVariant(VariantAnswersDto variantAnswersDto);
+    VariantCheckResultEntity checkVariant(VariantAnswersDto variantAnswersDto);
+    VariantCheckResultEntity checkQuestion(CheckQuestionDto checkQuestionDto);
 }

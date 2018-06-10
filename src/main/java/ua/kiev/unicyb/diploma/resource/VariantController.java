@@ -9,9 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ua.kiev.unicyb.diploma.domain.entity.answer.VariantCheckResultEntity;
 import ua.kiev.unicyb.diploma.domain.entity.variant.VariantEntity;
+import ua.kiev.unicyb.diploma.dto.request.CheckQuestionDto;
 import ua.kiev.unicyb.diploma.dto.request.VariantAnswersDto;
-import ua.kiev.unicyb.diploma.dto.response.VariantCheckDto;
 import ua.kiev.unicyb.diploma.service.CheckService;
 import ua.kiev.unicyb.diploma.service.VariantService;
 
@@ -33,8 +34,13 @@ public class VariantController {
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VariantCheckDto> checkVariant(@RequestBody VariantAnswersDto variantAnswersDto) {
-        final VariantCheckDto variantCheckDto = checkService.checkVariant(variantAnswersDto);
-        return new ResponseEntity(variantCheckDto, HttpStatus.OK);
+    public ResponseEntity<VariantCheckResultEntity> checkVariant(@RequestBody VariantAnswersDto variantAnswersDto) {
+        final VariantCheckResultEntity variantCheckResultEntity = checkService.checkVariant(variantAnswersDto);
+        return new ResponseEntity<>(variantCheckResultEntity, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/questions/check", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VariantCheckResultEntity> checkQuestion(@RequestBody CheckQuestionDto checkQuestionDto) {
+        return new ResponseEntity<>(checkService.checkQuestion(checkQuestionDto), HttpStatus.OK);
     }
 }
