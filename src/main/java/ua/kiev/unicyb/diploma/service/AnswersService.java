@@ -12,9 +12,9 @@ import ua.kiev.unicyb.diploma.domain.entity.question.QuestionType;
 import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
 import ua.kiev.unicyb.diploma.dto.request.QuestionAnswersDto;
 import ua.kiev.unicyb.diploma.dto.request.VariantAnswersDto;
-import ua.kiev.unicyb.diploma.repositories.QuestionAnswerRepository;
+import ua.kiev.unicyb.diploma.repositories.user.answer.QuestionAnswerRepository;
 import ua.kiev.unicyb.diploma.repositories.QuestionRepository;
-import ua.kiev.unicyb.diploma.repositories.UserVariantAnswersRepository;
+import ua.kiev.unicyb.diploma.repositories.user.answer.UserVariantAnswersRepository;
 import ua.kiev.unicyb.diploma.security.AuthenticationService;
 
 import java.util.ArrayList;

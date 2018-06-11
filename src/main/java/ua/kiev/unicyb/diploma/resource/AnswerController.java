@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.kiev.unicyb.diploma.domain.entity.answer.UserVariantAnswersEntity;
-import ua.kiev.unicyb.diploma.repositories.UserVariantAnswersRepository;
 import ua.kiev.unicyb.diploma.service.UserVariantAnswersService;
 
 @RestController

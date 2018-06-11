@@ -29,3 +29,4 @@ Resources:
             -e SERVER_PORT=8080 \
             -p 8080:8080 \
             denst/diploma
+

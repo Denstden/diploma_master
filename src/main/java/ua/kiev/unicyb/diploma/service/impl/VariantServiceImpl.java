@@ -1,13 +1,24 @@
 package ua.kiev.unicyb.diploma.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import ua.kiev.unicyb.diploma.domain.entity.answer.QuestionAnswerEntity;
+import ua.kiev.unicyb.diploma.domain.entity.answer.UserQuestionAnswers;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestConfigEntity;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.test.TestType;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.variant.VariantConfigEntity;
+import ua.kiev.unicyb.diploma.domain.entity.question.QuestionEntity;
+import ua.kiev.unicyb.diploma.domain.entity.question.QuestionType;
 import ua.kiev.unicyb.diploma.domain.entity.test.TestEntity;
 import ua.kiev.unicyb.diploma.domain.entity.variant.VariantEntity;
+import ua.kiev.unicyb.diploma.dto.response.AnswerDto;
+import ua.kiev.unicyb.diploma.dto.response.QuestionDto;
+import ua.kiev.unicyb.diploma.dto.response.QuestionWithAnswersDto;
 import ua.kiev.unicyb.diploma.factory.VariantFactory;
+import ua.kiev.unicyb.diploma.repositories.QuestionRepository;
+import ua.kiev.unicyb.diploma.repositories.user.answer.UserQuestionAnswersRepository;
 import ua.kiev.unicyb.diploma.repositories.config.TestConfigRepository;
 import ua.kiev.unicyb.diploma.repositories.TestRepository;
 import ua.kiev.unicyb.diploma.repositories.VariantRepository;
@@ -18,25 +29,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class VariantServiceImpl implements VariantService {
-    private final VariantRepository variantRepository;
-    private final VariantFactory variantFactory;
+    VariantRepository variantRepository;
+    VariantFactory variantFactory;
 
-    private final TestRepository testRepository;
-    private final TestConfigRepository testConfigRepository;
-    private final TrainingTestService trainingTestService;
-
-
-    @Autowired
-    public VariantServiceImpl(final VariantRepository variantRepository, final VariantFactory variantFactory,
-                              final TestRepository testRepository, final TestConfigRepository testConfigRepository,
-                              final TrainingTestService trainingTestService) {
-        this.variantRepository = variantRepository;
-        this.variantFactory = variantFactory;
-        this.testRepository = testRepository;
-        this.testConfigRepository = testConfigRepository;
-        this.trainingTestService = trainingTestService;
-    }
+    TestRepository testRepository;
+    TestConfigRepository testConfigRepository;
+    TrainingTestService trainingTestService;
+    QuestionRepository questionRepository;
+    UserQuestionAnswersRepository userQuestionAnswersRepository;
 
     @Override
     public VariantEntity getVariant(final Long testId) {
@@ -66,6 +69,49 @@ public class VariantServiceImpl implements VariantService {
             variants.add(variant);
         }
         return variants;
+    }
+
+    @Override
+    public List<QuestionWithAnswersDto> findByCheckedAndQuestionTypeForCurrentUser(Boolean isChecked, String questionType) {
+        final List<QuestionWithAnswersDto> result = new ArrayList<>();
+
+        final Iterable<QuestionEntity> questions = questionRepository.findByIsCheckedAndQuestionType(isChecked, QuestionType.valueOf(questionType));
+
+        for (QuestionEntity questionEntity : questions) {
+            final QuestionWithAnswersDto dto = new QuestionWithAnswersDto();
+            setQuestion(dto, questionEntity);
+            setAnswers(questionEntity, dto);
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    private void setAnswers(QuestionEntity questionEntity, QuestionWithAnswersDto dto) {
+        final Iterable<UserQuestionAnswers> answers = userQuestionAnswersRepository.findByQuestion(questionEntity);
+        final List<AnswerDto> answerDtos = new ArrayList<>();
+        for (UserQuestionAnswers userQuestionAnswers : answers) {
+            final List<QuestionAnswerEntity> questionAnswers = userQuestionAnswers.getQuestionAnswers();
+
+            questionAnswers.forEach(questionAnswer -> {
+                final AnswerDto answerDto = new AnswerDto();
+                answerDto.setAnswer(questionAnswer.getAnswer());
+                answerDto.setAnswerId(questionAnswer.getAnswerId());
+
+                answerDtos.add(answerDto);
+            });
+        }
+        dto.setAnswers(answerDtos);
+    }
+
+    private void setQuestion(QuestionWithAnswersDto dto, QuestionEntity questionEntity) {
+        final QuestionDto questionDto = new QuestionDto();
+        questionDto.setPreamble(questionEntity.getPreamble());
+        questionDto.setQuestionId(questionEntity.getQuestionId());
+        questionDto.setQuestionType(questionEntity.getQuestionType());
+        questionDto.setMark(questionEntity.getEstimation().getMark());
+
+        dto.setQuestion(questionDto);
     }
 
     private VariantEntity getNextTrainingVariant(final Long testId) {

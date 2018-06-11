@@ -10,11 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.kiev.unicyb.diploma.domain.entity.answer.VariantCheckResultEntity;
+import ua.kiev.unicyb.diploma.domain.entity.question.QuestionEntity;
 import ua.kiev.unicyb.diploma.domain.entity.variant.VariantEntity;
 import ua.kiev.unicyb.diploma.dto.request.CheckQuestionDto;
 import ua.kiev.unicyb.diploma.dto.request.VariantAnswersDto;
+import ua.kiev.unicyb.diploma.dto.response.QuestionWithAnswersDto;
 import ua.kiev.unicyb.diploma.service.CheckService;
 import ua.kiev.unicyb.diploma.service.VariantService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/variants")
@@ -27,7 +31,7 @@ public class VariantController {
     VariantService variantService;
     CheckService checkService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public VariantEntity getVariant(@RequestParam(name = "testId") Long testId) {
         final VariantEntity variant = variantService.getVariant(testId);
         return variant;
@@ -37,10 +41,5 @@ public class VariantController {
     public ResponseEntity<VariantCheckResultEntity> checkVariant(@RequestBody VariantAnswersDto variantAnswersDto) {
         final VariantCheckResultEntity variantCheckResultEntity = checkService.checkVariant(variantAnswersDto);
         return new ResponseEntity<>(variantCheckResultEntity, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/questions/check", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VariantCheckResultEntity> checkQuestion(@RequestBody CheckQuestionDto checkQuestionDto) {
-        return new ResponseEntity<>(checkService.checkQuestion(checkQuestionDto), HttpStatus.OK);
     }
 }

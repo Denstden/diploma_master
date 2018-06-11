@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ua.kiev.unicyb.diploma.domain.entity.answer.UserVariantAnswersEntity;
 import ua.kiev.unicyb.diploma.domain.entity.user.UserEntity;
 import ua.kiev.unicyb.diploma.domain.entity.variant.VariantEntity;
-import ua.kiev.unicyb.diploma.repositories.UserVariantAnswersRepository;
+import ua.kiev.unicyb.diploma.repositories.user.answer.UserVariantAnswersRepository;
 import ua.kiev.unicyb.diploma.repositories.VariantRepository;
 import ua.kiev.unicyb.diploma.repositories.user.UserRepository;
 import ua.kiev.unicyb.diploma.service.UserVariantAnswersService;
