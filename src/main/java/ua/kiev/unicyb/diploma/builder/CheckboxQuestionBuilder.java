@@ -29,12 +29,12 @@ public class CheckboxQuestionBuilder extends AbstractQuestionBuilder {
     public QuestionEntity build() {
         final QuestionEntity questionEntity = buildCommon();
 
-        questionEntity.setQuestionAnswers(buildQuestionAnswers((CheckboxQuestionDescriptionEntity) questionDescription));
+        questionEntity.setQuestionAnswers(buildQuestionAnswers((CheckboxQuestionDescriptionEntity) questionDescription, questionEntity));
 
         return questionEntity;
     }
 
-    private List<QuestionAnswerEntity> buildQuestionAnswers(final CheckboxQuestionDescriptionEntity questionDescription) {
+    private List<QuestionAnswerEntity> buildQuestionAnswers(final CheckboxQuestionDescriptionEntity questionDescription, final QuestionEntity questionEntity) {
         final Integer countCorrectAnswers = questionDescription.getCountCorrectAnswers();
         final Integer countIncorrectAnswers = questionDescription.getCountIncorrectAnswers();
 
@@ -43,8 +43,8 @@ public class CheckboxQuestionBuilder extends AbstractQuestionBuilder {
         final List<AnswerDescriptionEntity> correctAnswers = answers.stream().filter(AnswerDescriptionEntity::getIsCorrect).collect(Collectors.toList());
         final List<AnswerDescriptionEntity> incorrectAnswers = answers.stream().filter(answer -> !answer.getIsCorrect()).collect(Collectors.toList());
 
-        final List<QuestionAnswerEntity> correct = getRandomNAnswersFromList(correctAnswers, countCorrectAnswers);
-        final List<QuestionAnswerEntity> incorrect = getRandomNAnswersFromList(incorrectAnswers, countIncorrectAnswers);
+        final List<QuestionAnswerEntity> correct = getRandomNAnswersFromList(correctAnswers, countCorrectAnswers, questionEntity);
+        final List<QuestionAnswerEntity> incorrect = getRandomNAnswersFromList(incorrectAnswers, countIncorrectAnswers, questionEntity);
         correct.addAll(incorrect);
 
         return correct;

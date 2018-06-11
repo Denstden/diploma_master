@@ -12,16 +12,15 @@ import ua.kiev.unicyb.diploma.domain.entity.configuration.question.parameterized
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.parameterized.parameter.value.DiapasonParameterValue;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.parameterized.parameter.value.ListParameterValue;
 import ua.kiev.unicyb.diploma.domain.entity.configuration.question.parameterized.parameter.value.ParamEntity;
+import ua.kiev.unicyb.diploma.domain.entity.question.ParameterizedValue;
+import ua.kiev.unicyb.diploma.domain.entity.question.QuestionEntity;
 import ua.kiev.unicyb.diploma.domain.generated.ParameterType;
 import ua.kiev.unicyb.diploma.exception.ParameterizedException;
 import ua.kiev.unicyb.diploma.service.ConditionService;
 import ua.kiev.unicyb.diploma.service.ParameterSubstitutionService;
 import ua.kiev.unicyb.diploma.service.ParameterizedService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -35,24 +34,35 @@ public class ParameterizedServiceImpl implements ParameterizedService {
     ParameterSubstitutionService parameterSubstitutionService;
 
     @Override
-    public String processParameterized(final ParameterizedEntity entity, final String value) {
+    public String processParameterized(final ParameterizedEntity entity, final String value, final QuestionEntity questionEntity) {
         if (entity == null) {
             return value;
         }
 
-        return processParameterized(value, entity.getParameters(), entity.getConditions());
+        return processParameterized(value, entity.getParameters(), entity.getConditions(), questionEntity);
     }
 
     private String processParameterized(final String value, final List<ParameterEntity> parameters,
-                                        final List<ConditionEntity> conditions) {
+                                        final List<ConditionEntity> conditions, final QuestionEntity questionEntity) {
         if (parameters == null || parameters.isEmpty()) {
             return value;
         }
 
         final Map<String, String> parameterValuesToSubstitute = getParameterValues(parameters, conditions);
         log.debug("Parameters to substitute: {}", parameterValuesToSubstitute.toString());
+        final String result = parameterSubstitutionService.substitute(value, parameterValuesToSubstitute);
 
-        return parameterSubstitutionService.substitute(value, parameterValuesToSubstitute);
+        final List<ParameterizedValue> parameterizedValues = new ArrayList<>();
+        for (Map.Entry<String, String> parameter : parameterValuesToSubstitute.entrySet()) {
+            final ParameterizedValue parameterizedValue = new ParameterizedValue();
+            parameterizedValue.setName(parameter.getKey());
+            parameterizedValue.setValue(parameter.getValue());
+            parameterizedValues.add(parameterizedValue);
+        }
+
+        questionEntity.setParameterized(parameterizedValues);
+
+        return result;
     }
 
     private Map<String, String> getParameterValues(final List<ParameterEntity> parameters,

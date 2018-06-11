@@ -29,12 +29,12 @@ public class RadioButtonQuestionBuilder extends AbstractQuestionBuilder {
     public QuestionEntity build() {
         final QuestionEntity questionEntity = buildCommon();
 
-        questionEntity.setQuestionAnswers(buildQuestionAnswers((RadioButtonQuestionDescriptionEntity) questionDescription));
+        questionEntity.setQuestionAnswers(buildQuestionAnswers((RadioButtonQuestionDescriptionEntity) questionDescription, questionEntity));
 
         return questionEntity;
     }
 
-    private List<QuestionAnswerEntity> buildQuestionAnswers(final RadioButtonQuestionDescriptionEntity questionDescription) {
+    private List<QuestionAnswerEntity> buildQuestionAnswers(final RadioButtonQuestionDescriptionEntity questionDescription, final QuestionEntity questionEntity) {
         final Integer countCorrectAnswers = 1;
         final Integer countIncorrectAnswers = questionDescription.getCountAnswers() - 1;
 
@@ -43,8 +43,8 @@ public class RadioButtonQuestionBuilder extends AbstractQuestionBuilder {
         final List<AnswerDescriptionEntity> correctAnswers = answers.stream().filter(AnswerDescriptionEntity::getIsCorrect).collect(Collectors.toList());
         final List<AnswerDescriptionEntity> incorrectAnswers = answers.stream().filter(answer -> !answer.getIsCorrect()).collect(Collectors.toList());
 
-        final QuestionAnswerEntity correct = getRandomNAnswersFromList(correctAnswers, countCorrectAnswers).get(0);
-        final List<QuestionAnswerEntity> incorrect = getRandomNAnswersFromList(incorrectAnswers, countIncorrectAnswers);
+        final QuestionAnswerEntity correct = getRandomNAnswersFromList(correctAnswers, countCorrectAnswers, questionEntity).get(0);
+        final List<QuestionAnswerEntity> incorrect = getRandomNAnswersFromList(incorrectAnswers, countIncorrectAnswers, questionEntity);
         incorrect.add(correct);
 
         return incorrect;

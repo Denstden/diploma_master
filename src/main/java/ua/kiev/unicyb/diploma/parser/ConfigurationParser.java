@@ -25,7 +25,7 @@ public class ConfigurationParser {
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (GlobalConfig) jaxbUnmarshaller.unmarshal(file);
-        } catch (JAXBException | IOException e) {
+        } catch (JAXBException e) {
             log.error(e.toString());
             throw new ParsingConfigurationException(e.getMessage());
         }
@@ -38,7 +38,7 @@ public class ConfigurationParser {
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (Questions) jaxbUnmarshaller.unmarshal(file);
-        } catch (JAXBException | IOException e) {
+        } catch (JAXBException e) {
             log.error(e.toString());
             throw new ParsingConfigurationException(e.getMessage());
         }
@@ -51,7 +51,7 @@ public class ConfigurationParser {
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (Answers) jaxbUnmarshaller.unmarshal(file);
-        } catch (JAXBException | IOException e) {
+        } catch (JAXBException e) {
             log.error(e.toString());
             throw new ParsingConfigurationException(e.getMessage());
         }
@@ -64,13 +64,13 @@ public class ConfigurationParser {
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return (Parameterized) jaxbUnmarshaller.unmarshal(file);
-        } catch (JAXBException | IOException e) {
+        } catch (JAXBException e) {
             log.error(e.toString());
             throw new ParsingConfigurationException(e.getMessage());
         }
     }
 
-    private File getResource(String fileName) throws IOException {
+    private File getResource(String fileName) {
         log.debug("Trying parse file {}", fileName);
         return new File(fileName);
     }

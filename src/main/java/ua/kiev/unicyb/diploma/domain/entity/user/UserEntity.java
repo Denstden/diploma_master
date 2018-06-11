@@ -30,6 +30,15 @@ public class UserEntity {
     private String password;
 
     @Column
+    private String name;
+
+    @Column
+    private String surname;
+
+    @Column
+    private Boolean isActive;
+
+    @Column
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)

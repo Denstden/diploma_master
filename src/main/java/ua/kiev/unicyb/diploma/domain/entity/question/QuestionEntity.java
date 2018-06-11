@@ -1,5 +1,6 @@
 package ua.kiev.unicyb.diploma.domain.entity.question;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import ua.kiev.unicyb.diploma.domain.entity.EstimationEntity;
@@ -42,6 +43,11 @@ public class QuestionEntity {
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "ESTIMATION_ID")
     private EstimationEntity estimation;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "PARAMETERIZED_VALUE_ID")
+    @JsonIgnore
+    private List<ParameterizedValue> parameterized = new ArrayList<>();
 
     @Column
     private boolean isChecked = false;

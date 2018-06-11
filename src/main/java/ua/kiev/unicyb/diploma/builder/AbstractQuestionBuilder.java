@@ -44,7 +44,7 @@ public abstract class AbstractQuestionBuilder {
     protected QuestionEntity buildCommon() {
         final QuestionEntity questionEntity = new QuestionEntity();
 
-        questionEntity.setPreamble(concatPreambles());
+        questionEntity.setPreamble(concatPreambles(questionEntity));
         questionEntity.setQuestionType(questionType);
         questionEntity.setFormattingElements(formattingElementsConverter.toEntity(questionDescription.getFormattingElements()));
         questionEntity.setHashTag(questionDescription.getHashTag());
@@ -57,7 +57,7 @@ public abstract class AbstractQuestionBuilder {
         return questionDescription.getParameterized() != null;
     }
 
-    private String concatPreambles() {
+    private String concatPreambles(final QuestionEntity questionEntity) {
         final StringBuilder result = new StringBuilder();
         if (globalPreamble != null) {
             result.append(globalPreamble);
@@ -65,16 +65,16 @@ public abstract class AbstractQuestionBuilder {
 
         String preamble = questionDescription.getPreamble();
         if (preamble != null) {
-            preamble = processParameterized(questionDescription.getParameterized(), preamble);
+            preamble = processParameterized(questionDescription.getParameterized(), preamble, questionEntity);
             result.append(PREAMBLE_SEPARATOR).append(preamble);
         }
 
         return result.toString();
     }
 
-    private String processParameterized(ParameterizedEntity parameterized, String preamble) {
+    private String processParameterized(ParameterizedEntity parameterized, String preamble, QuestionEntity questionEntity) {
         if (parameterized != null) {
-            return parameterizedService.processParameterized(parameterized, preamble);
+            return parameterizedService.processParameterized(parameterized, preamble, questionEntity);
         } else {
             return preamble;
         }
@@ -88,13 +88,13 @@ public abstract class AbstractQuestionBuilder {
     }
 
     protected List<QuestionAnswerEntity> getRandomNAnswersFromList(final List<AnswerDescriptionEntity> answers,
-                                                                 final Integer count) {
+                                                                 final Integer count, final QuestionEntity questionEntity) {
         final List<QuestionAnswerEntity> randomNAnswers = new ArrayList<>();
 
         Collections.shuffle(answers);
 
         for (int i = 0; i < count; i++) {
-            randomNAnswers.add(answerConverter.toEntity(answers.get(i), questionDescription.getParameterized()));
+            randomNAnswers.add(answerConverter.toEntity(answers.get(i), questionEntity.getParameterized()));
         }
 
         return randomNAnswers;

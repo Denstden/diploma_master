@@ -241,7 +241,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS"));
     }
 
-    private void createConfigurationFolderIfNotExists(String configurationFolder) throws FileNotFoundException {
+    private void createConfigurationFolderIfNotExists(String configurationFolder) {
         File folder = new File(configurationFolder);
         if (!folder.exists()) {
             folder.mkdir();

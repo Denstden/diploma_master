@@ -12,8 +12,11 @@ public class UserConverter implements Converter<UserEntity, UserDto> {
         final UserEntity entity = new UserEntity();
 
         entity.setEmail(dto.getEmail());
-        entity.setUsername(dto.getUserName());
+        entity.setUsername(dto.getUsername());
         entity.setPassword(dto.getPassword());
+        entity.setIsActive(dto.getIsActive());
+        entity.setName(dto.getName());
+        entity.setSurname(dto.getSurname());
 
         return entity;
     }

@@ -24,5 +24,6 @@ Resources:
             --name postgres \
             -e POSTGRES_PASSWORD=postgres \
             -e POSTGRES_DB=diploma_db \
+            -e PG_SHARED_BUFFERS=1024 \
             -p 5432:5432 \
             library/postgres:9.6-alpine
