@@ -66,6 +66,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.save(admin);
         userRepository.save(tutor);
         userRepository.save(student);
+        userRepository.save(student2);
     }
 
     private UserEntity createUserWithRole(final String email, final String password,
